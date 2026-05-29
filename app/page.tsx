@@ -1,6 +1,7 @@
 import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import Pricing from "@/components/landing/Pricing";
+import FAQ from "@/components/landing/FAQ";
 
 /**
  * Home page component renders the main landing page.
@@ -14,8 +15,10 @@ export default function Home() {
       <Hero />
       <Features />
       <Pricing />
+      <FAQ />
     </main>
   );
 }
+
 
 

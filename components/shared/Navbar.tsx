@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 /**
  * Navbar component renders a fully responsive, sticky, and dark-mode compatible navigation bar.
@@ -21,9 +23,11 @@ import { cn } from "@/lib/utils";
  * Scroll Behavior:
  * - Transitions background colors and applies a shadow once scroll position exceeds 10 pixels.
  *
- * @returns {React.ReactElement} The responsive Navbar component.
+ * @returns {React.ReactElement | null} The responsive Navbar component, or null on auth routes.
  */
 export default function Navbar() {
+  const pathname = usePathname();
+
   // State to manage whether the mobile dropdown menu is open
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
   
@@ -49,6 +53,16 @@ export default function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // Hide the navbar on authentication, dashboard, and settings routes to allow full-screen pages
+  if (
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/settings")
+  ) {
+    return null;
+  }
 
   // Close the mobile menu helper to avoid code duplication
   const closeMenu = () => setIsMenuOpen(false);
@@ -103,6 +117,7 @@ export default function Navbar() {
             >
               <Link href="/login">Login</Link>
             </Button>
+            <ThemeToggle />
             <Button
               asChild
               className="bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
@@ -148,6 +163,10 @@ export default function Navbar() {
 
             {/* Mobile Stacked Buttons */}
             <div className="pt-4 pb-2 border-t border-zinc-200 dark:border-zinc-800 space-y-2 px-3">
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-sm font-medium text-zinc-600 dark:text-zinc-300">Theme</span>
+                <ThemeToggle />
+              </div>
               <Button
                 variant="outline"
                 asChild
